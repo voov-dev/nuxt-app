@@ -1,20 +1,11 @@
 <template>
-  <v-container
-    class="page-top"
-    cols="12"
-    sm="12"
-    md="12"
-    lg="6"
-    xl="6"
-  >
-    <h2> Shopping Cart</h2>
-    <v-container
-      v-if="inCartProducts.length"
-    >
-      <v-simple-table
-        dense
-
-      >
+  <v-row>
+    <v-col cols="12" sm="12" md="12" lg="12" xl="12">
+      <h2>Shopping Cart</h2>
+    </v-col>
+    <v-col v-if="inCartProducts.length"
+         cols="12" sm="12" md="12" lg="12" xl="12">
+      <v-simple-table dense>
         <template v-slot:default>
           <thead>
           <tr>
@@ -22,65 +13,51 @@
                 cols="4"
                 sm="3"
                 md="4"
-            >
-              Item
-            </th>
+                v-text="'Item'"
+            />
             <th class="text-left"
                 cols="3"
                 sm="2"
                 md="3"
-            >
-              Price
-            </th>
+                v-text="'Price'"
+            />
             <th class="text-left"
                 cols="3"
                 sm="2"
                 md="3"
-            >
-              Qty
-            </th>
+                v-text="'Qty'"
+            />
             <th class="text-left"
                 cols="3"
                 sm="2"
                 md="3"
-            >
-              Total
-            </th>
+                v-text="'Total'"
+            />
           </tr>
           </thead>
-          <tbody
-          >
-          <AppInCartItem
-            v-for="item in inCartProducts"
-            :key="item.sku"
-            :product="item"
-          />
+          <tbody>
+            <AppInCartItem v-for="item in inCartProducts"
+                           :key="item.sku"
+                           :product="item"
+            />
           </tbody>
         </template>
       </v-simple-table>
-      <v-col
-        cols="12"
-        class="d-flex justify-end flex-wrap"
+      <v-col cols="12"
+             class="d-flex justify-end flex-wrap"
       >
-        <h3
-          class="text-right"
-          style="width: 100%"
-        > Subtotal: $ {{subtotal.toFixed(2)}} </h3>
-        <v-btn
-          color="primary"
-          class="mt-2"
+        <h3 class="text-right"
+            style="display: block"
         >
-          Checkout
-        </v-btn>
+          Subtotal: $ {{subtotal.toFixed(2)}}
+        </h3>
       </v-col>
-    </v-container>
-    <div
-      v-else
-    >
+    </v-col>
+    <div v-else>
       <v-divider/>
       <span> No items in cart yet.</span>
     </div>
-  </v-container>
+  </v-row>
 </template>
 
 <script>
