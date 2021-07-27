@@ -53,10 +53,10 @@
         </h3>
       </v-col>
     </v-col>
-    <div v-else>
-      <v-divider/>
+    <v-col v-else
+           cols="12" sm="12" md="12" lg="12" xl="12">
       <span> No items in cart yet.</span>
-    </div>
+    </v-col>
   </v-row>
 </template>
 
