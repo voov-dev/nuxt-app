@@ -1,6 +1,13 @@
 <template>
   <NuxtLink to="/cart">
-    <v-badge top
+    <v-icon v-if="inCartItemsQty <= 0"
+      large
+      color="warning"
+    >
+      mdi-basket
+    </v-icon>
+    <v-badge v-else
+             top
              bordered
              color="red darken-4"
              :content="inCartItemsQty"
@@ -9,7 +16,7 @@
     >
       <v-icon
         large
-        color="green darken-2"
+        color="warning"
       >
         mdi-basket
       </v-icon>

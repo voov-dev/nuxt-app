@@ -18,8 +18,7 @@ export const getters = {
 
 export const mutations = {
   updateInCartProductList(state, product) {
-    console.log(product)
-    if (!state.inCartProductList.filter((item) => item.id === product.id).length) {
+    if (!state.inCartProductList.filter(item => item.id === product.id).length) {
       state.inCartProductList.push(product);
       product.qty = 1;
     }
@@ -32,23 +31,26 @@ export const mutations = {
       if ((item.id === id) && (newQty > 0)) {
         item.qty = newQty
       }
-    })
+    });
   },
   updateInCartItemsQty(state) {
     let newAllItemsQty = 0;
+
     state.inCartProductList.forEach(item => {
       newAllItemsQty += item.qty
-    })
-    state.inCartItemsQty = newAllItemsQty
+    });
+
+    state.inCartItemsQty = newAllItemsQty;
   },
   removeItemFromCart(state, removedItemId) {
-   const filteredItems = state.inCartProductList.filter((item) => item.id !== removedItemId)
-    state.inCartProductList = filteredItems
+    const filteredItems = state.inCartProductList.filter(item => item.id !== removedItemId);
+
+    state.inCartProductList = filteredItems;
   },
   calcSubtotal(state) {
     state.inCartProductList.forEach(item => {
       state.subtotal += (item.qty * item.regular_price.value)
-    })
+    });
   },
 }
 

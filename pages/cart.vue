@@ -8,32 +8,32 @@
       <v-simple-table dense>
         <template v-slot:default>
           <thead>
-          <tr>
-            <th class="text-center"
-                cols="4"
-                sm="3"
-                md="4"
-                v-text="'Item'"
-            />
-            <th class="text-left"
-                cols="3"
-                sm="2"
-                md="3"
-                v-text="'Price'"
-            />
-            <th class="text-left"
-                cols="3"
-                sm="2"
-                md="3"
-                v-text="'Qty'"
-            />
-            <th class="text-left"
-                cols="3"
-                sm="2"
-                md="3"
-                v-text="'Total'"
-            />
-          </tr>
+            <tr>
+              <th class="text-center"
+                  cols="4"
+                  sm="3"
+                  md="4"
+                  v-text="'Item'"
+              />
+              <th class="text-left"
+                  cols="3"
+                  sm="2"
+                  md="3"
+                  v-text="'Price'"
+              />
+              <th class="text-left"
+                  cols="3"
+                  sm="2"
+                  md="3"
+                  v-text="'Qty'"
+              />
+              <th class="text-left"
+                  cols="3"
+                  sm="2"
+                  md="3"
+                  v-text="'Total'"
+              />
+            </tr>
           </thead>
           <tbody>
             <AppInCartItem v-for="item in inCartProducts"

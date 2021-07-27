@@ -29,8 +29,8 @@
             :label="`Radio ${item.label}`"
             :value="item.value_index"
             :style="`color: ${item.value}`"
-            :disabled="isDisabled(index, option.attribute_code, item.value_index)"
-            @click="updateOptions()"
+            :disabled="isDisabledOption(index, option.attribute_code, item.value_index)"
+            @click="updateConfigurableProduct()"
           ></v-radio>
         </v-radio-group>
 
@@ -39,8 +39,8 @@
     </v-card-text>
     <v-card-actions>
       <v-btn block
-             @click.prevent=addToCart(configurableProduct)
              :disabled="isBtnDisabled"
+             @click.prevent="updateConfigurableProduct(), addToCart(configurableProduct)"
              v-text="'Add to cart'">
       </v-btn>
     </v-card-actions>
@@ -48,31 +48,25 @@
 </template>
 
 <script>
-import {mapActions, mapGetters} from "vuex";
+import {mapActions} from "vuex";
 
 export default {
   name: 'AppConfigurableProduct',
-  data() {
-    return {
-      id: null,
-      image: null,
-      sku: null,
-      size: null,
-      color: null,
-      options: {},
-      defaultProduct: {},
-      isBtnDisabled: false,
-    }
-  },
   props: {
     product: {
       type: Object,
-      require: true,
+      require: true
+    }
+  },
+  data() {
+    return {
+      configurableProduct: {},
+      options: {},
+      isBtnDisabled: false
     }
   },
   created() {
     if (!Object.keys(this.options).length) {
-      this.defaultProduct = this.product;
       const OPTIONS = {};
       this.product.variants[0].attributes.forEach(item => {
         OPTIONS[item.code] = item.value_index
@@ -80,58 +74,66 @@ export default {
 
       this.options = OPTIONS;
     }
-    this.setConfigurableProduct(this.product);
-    this.updateProducts(this.product);
-  },
-  computed: {
-    ...mapGetters({
-      configurableProduct: 'configurableProduct/getConfigurableProduct'
-    })
+
+    this.configurableProduct = Object.assign({}, this.product);
   },
   methods: {
     ...mapActions({
-      updateProducts: 'configurableProduct/updateProducts',
-      setConfigurableProduct: 'configurableProduct/setConfigurableProduct',
       addToCart: 'localStorage/addToCart'
     }),
-    isDisabled(deep, key, value) {
-      const CONFIG = [{
-        "code": Object.keys(this.options)[0],
-        "value_index": this.options[Object.keys(this.options)[0]]
-      }];
-      const arrayKeys = Object.keys(this.options);
+    isDisabledOption(DEEP, KEY, VALUE) {
+      const SELECTED_OPTIONS = [];
+      const SELECTED_OPTIONS_KEYS = Object.keys(this.options);
+      const CHECK_OPTIONS = {
+        "code": KEY,
+        "value_index": VALUE
+      };
 
-      arrayKeys.splice(arrayKeys.indexOf(CONFIG[0].code), 1);
-
-      arrayKeys.forEach(key => CONFIG.push({
+      SELECTED_OPTIONS_KEYS.forEach(key => SELECTED_OPTIONS.push({
         "code": key,
-        "value_index": value
+        "value_index": this.options[key]
       }));
 
-      if (this.product.variants.findIndex((item) => this._.isEqual(item.attributes, CONFIG)) === -1 && deep !== 0) {
+      SELECTED_OPTIONS.splice(SELECTED_OPTIONS.indexOf(KEY), 1);
+      SELECTED_OPTIONS.push(CHECK_OPTIONS);
+
+      if (this.product.variants.findIndex((item) => this._.isEqual(item.attributes, SELECTED_OPTIONS)) === -1 && DEEP !== 0) {
         return true;
       }
 
       return false;
     },
-    updateOptions() {
-      const CONFIG = [];
+    updateConfigurableProduct() {
+      const ATTRIBUTES = [];
 
-      Object.keys(this.options).forEach(key => CONFIG.push({
+      Object.keys(this.options).forEach(key => ATTRIBUTES.push({
         "code": key,
         "value_index": this.options[key]
       }));
 
-      const PRODUCT_INDEX = this.product.variants.findIndex((item) => this._.isEqual(item.attributes, CONFIG));
+      const PRODUCT_INDEX = this.product.variants.findIndex((item) => this._.isEqual(item.attributes, ATTRIBUTES));
+      const PRODUCT_NEW_OPTION = {...this.product.variants[PRODUCT_INDEX]}.product;
+      const PRODUCT_NEW_ATTRIBUTES = {...this.product.variants[PRODUCT_INDEX]}.attributes;
 
       if (PRODUCT_INDEX !== -1) {
         this.isBtnDisabled = false;
-        this.updateProducts({...this.product.variants[PRODUCT_INDEX]}.product);
+
+        this.configurableProduct.id = PRODUCT_NEW_OPTION.id;
+        this.configurableProduct.sku = PRODUCT_NEW_OPTION.sku;
+        this.configurableProduct.image = PRODUCT_NEW_OPTION.image;
+        this.configurableProduct.color = this.getLabel(PRODUCT_NEW_ATTRIBUTES[0]);
+        this.configurableProduct.size = this.getLabel(PRODUCT_NEW_ATTRIBUTES[1]);
       } else {
         this.isBtnDisabled = true;
-        this.updateProducts(this.defaultProduct);
+
+        this.configurableProduct = Object.assign({}, this.product);
       }
-    }
+    },
+    getLabel(SEARCH_ATTRIBUTE) {
+      const ATTRIBUTE = this.product.configurable_options.filter(item => item.attribute_code === SEARCH_ATTRIBUTE.code);
+      const LABEL = ATTRIBUTE[0].values.filter(item => item.value_index === SEARCH_ATTRIBUTE.value_index);
+      return LABEL[0].label;
+    },
   }
 }
 </script>

@@ -27,16 +27,16 @@ import AppSimpleProduct from "~/components/SimpleProduct";
 import AppConfigurableProduct from "~/components/ConfigurableProduct";
 
 export default {
+  name: 'AppProductList',
   components: {
     AppSimpleProduct,
     AppConfigurableProduct
   },
-  name: 'AppProductList',
   props: {
     productList: {
       type: Array,
       required: true
-    },
-  },
+    }
+  }
 }
 </script>

@@ -4,9 +4,7 @@
       <AppBrandList/>
     </v-col>
     <v-col class="products flex-sm-grow-1">
-      <AppProductList
-        :productList="filteredProductList"
-      />
+      <AppProductList :productList="filteredProductList" />
     </v-col>
   </v-row>
 </template>
@@ -21,11 +19,6 @@ export default {
     AppBrandList,
     AppProductList
   },
-  methods: {
-    ...mapActions({
-      getProducts: 'product/getProducts'
-    })
-  },
   computed: {
     ...mapGetters({
       productList: 'product/productList',
@@ -36,11 +29,16 @@ export default {
         return this.productList
       }
 
-      return this.productList.filter(item => this.selectedBrands.includes(item.id));
+      return this.productList.filter(item => this.selectedBrands.includes(item.brand));
     }
   },
   async mounted() {
     await this.getProducts()
+  },
+  methods: {
+    ...mapActions({
+      getProducts: 'product/getProducts'
+    })
   }
 }
 </script>

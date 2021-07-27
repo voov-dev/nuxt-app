@@ -1,54 +1,31 @@
 <template>
   <tr>
     <td>
-      <v-row class="flex-nowrap align-center">
-        <v-col
-          cols="4"
-          sm="3"
-          md="4"
-          style="max-width: 200px"
-        >
-          <v-img
-            :src="product.image"
-            class="align-center"
-          />
-        </v-col>
-        <v-col
-          cols="6"
-          sm="4"
-          md="6"
-        >
-          <span> {{ product.brand }} / {{ product.title }}</span>
-          <div v-if="product.size"> Size: {{ product.size }} </div>
-          <div v-if="product.color"> Color: {{ product.color }} </div>
-        </v-col>
-      </v-row>
+      <div class="d-flex align-center mr-2">
+        <v-img
+          :src="product.image"
+          max-height="140"
+          max-width="140"
+          class="align-center"
+        />
+        <div>
+          <div>{{ product.brand }} / {{ product.title }}</div>
+          <div v-if="product.size">Size: {{ product.size }}</div>
+          <div v-if="product.color">Color: {{ product.color }}</div>
+        </div>
+      </div>
     </td>
     <td>
-      <v-col
-        cols="4"
-        sm="2"
-        md="3"
-      >
-        <span>{{ product.regular_price.currency }} {{ product.regular_price.value }} </span>
-      </v-col>
+      <span>{{ product.regular_price.currency }} {{ product.regular_price.value }} </span>
     </td>
     <td>
       <AppItemQty :qty="+product.qty" :itemId="product.id"/>
     </td>
     <td>
-      <v-col
-        cols="4"
-        sm="2"
-        md="3"
-      >
-             <span>
-              {{ product.regular_price.currency }} {{ (product.qty * product.regular_price.value).toFixed(2) }}
-            </span>
-      </v-col>
-    </td>
-    <td>
-      <AppRemoveCartItemButton :itemId="product.id"/>
+      <div class="d-flex align-center">
+        <span class="mr-auto">{{ product.regular_price.currency }} {{ (product.qty * product.regular_price.value).toFixed(2) }}</span>
+        <AppRemoveCartItemButton :itemId="product.id"/>
+      </div>
     </td>
   </tr>
 </template>
